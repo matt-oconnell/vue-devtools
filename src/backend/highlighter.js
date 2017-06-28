@@ -1,5 +1,6 @@
 import { inDoc } from '../util'
 
+let context = document
 const overlay = document.createElement('div')
 overlay.style.backgroundColor = 'rgba(104, 182, 255, 0.35)'
 overlay.style.position = 'fixed'
@@ -13,6 +14,7 @@ overlay.style.pointerEvents = 'none'
  */
 
 export function highlight (instance) {
+  context = instance.$el.getRootNode()
   if (!instance) return
   const rect = getInstanceRect(instance)
   if (rect) {
@@ -26,7 +28,7 @@ export function highlight (instance) {
 
 export function unHighlight () {
   if (overlay.parentNode) {
-    document.body.removeChild(overlay)
+    context.body.removeChild(overlay)
   }
 }
 
@@ -112,7 +114,7 @@ function showOverlay ({ width = 0, height = 0, top = 0, left = 0 }) {
   overlay.style.height = ~~height + 'px'
   overlay.style.top = ~~top + 'px'
   overlay.style.left = ~~left + 'px'
-  document.body.appendChild(overlay)
+  context.body.appendChild(overlay)
 }
 
 /**

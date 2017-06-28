@@ -106,7 +106,8 @@ function scan () {
   rootInstances.length = 0
   let inFragment = false
   let currentFragment = null
-  walk(document, function (node) {
+  const iframes = document.getElementsByTagName('iframe')
+  const walkFn = function (node) {
     if (inFragment) {
       if (node === currentFragment._fragmentEnd) {
         inFragment = false
@@ -114,6 +115,7 @@ function scan () {
       }
       return true
     }
+
     const instance = node.__vue__
     if (instance) {
       if (instance._isFragment) {
@@ -137,7 +139,14 @@ function scan () {
 
       return true
     }
-  })
+  }
+
+  if (iframes && iframes.length) {
+    walk(iframes[0].contentDocument, walkFn)
+  }
+
+  walk(document, walkFn)
+
   flush()
 }
 
